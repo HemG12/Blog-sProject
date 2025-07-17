@@ -15,39 +15,34 @@
 
     </div>
     <div id="app" class="mt-auto text-3xl font-bold text-blue-600">Welcome to Food's Recipe Blog!</div>
+    <input  type="text" id="searchInput" placeholder="Search recipes..." class="mt-2 px-4 py-2 border border-gray-300 rounded-lg w-1/3" />
     <a class="create-post mt-2 px-2 py-2 bg-blue-600 text-white rounded" href="cretaepost.html">Create Post</a>
   </div>
-  <div class="flex items-center mt-10 justify-between">
-    <div id="card" class="max-w-sm mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
-      <img src="./src/public/Chai.jpg" class="mx-auto mt-6 h-48 w-48  " alt="Delicious Food" />
-      <h1 class="mt-2 text-xl font-bold">Milk Tea</h1>
-      <p class="contents mt-1 text-gray-600 w-auto">A cure of your Headache is the sip of this delightful beverage.</p>
-      <div class="mt-4 flex justify-between">
-        <span class="text-gray-500">Posted on: 2023-10-01</span>
-        <button data-modal="chaiModal" class="open-btn read-more px-4 py-2 bg-blue-600 text-white rounded">Read More</button>
-      </div>
 
+
+  
+   <!-- Dynamic Model-->
+    <div id="postModel"  class="fixed inset-0 bg-gray-800 bg-opacity-50 items-center justify-center hidden">
+          <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+      <h2 id="title" class="text-xl font-bold mb-4"></h2>
+      <img id="img" src="" class="mx-auto mt-6 h-48 w-48 " alt="Delicious Food" />
+      <p id="desc" class="mt-2 text-gray-600"></p>
+      <ol id="ol" class="list-decimal list-inside mt-2 ">
+      </ol>
+      <div class="mt-4">
+        <span id="span" class="text-gray-500"></span>
+      </div>
+      <button class=" close-btn mt-4 px-4 py-2 bg-blue-600 text-white rounded" id="closeModal">Close</button>
+    </div>
     </div>
 
-    <div id="card" class="max-w-sm mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
-      <img src="/pic1.jpg" class="mx-auto mt-6 h-48 w-48  border-4 border-blue-500" alt="Delicious Food" />
-      <h1 class="mt-2 text-xl font-bold">Delicious Food</h1>
-      <p class="contents mt-1 text-gray-600 w-auto">A delightful dish that is sure to please your taste buds.</p>
-      <div class="mt-4 flex justify-between">
-        <span class="text-gray-500">Posted on: 2023-10-01</span>
-        <button class="px-4 py-2 bg-blue-600 text-white rounded">Read More</button>
-      </div>
 
-    </div>
+     <div id="postCard" class="grid grid-cols-3 gap-4">
+      <h1>hello</h1>
+     </div>
+
+
     
-     <div id="card" class="max-w-sm mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
-      <img src="/pic1.jpg" class="mx-auto mt-6 h-48 w-48  border-4 border-blue-500" alt="Delicious Food" />
-      <h1 class="mt-2 text-xl font-bold">Delicious Food</h1>
-      <p class="contents mt-1 text-gray-600 w-auto">A delightful dish that is sure to please your taste buds.</p>
-      <div class="mt-4 flex justify-between">
-        <span class="text-gray-500">Posted on: 2023-10-01</span>
-        <button class="px-4 py-2 bg-blue-600 text-white rounded">Read More</button>
-      </div>
 
     </div>
 
@@ -72,66 +67,14 @@
 
       </div>
     </div>
-     <div class="w-auto mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg flex justify-between space-x-4">
-      <div>
-        <img
-        class="h-48 w-48 border-4 border-blue-500"
-        src="pic2"
-        alt="Food Image"
-        />
-      </div>
-      <div class="justify-items-start pr-96">
-        <h1 class="text-xl font-bold">Delicious Recipe</h1>
-        <p>A delightful recipe that is sure to please your taste buds.</p>
-      </div>
-      <div>
-        <button id="btn" class="h-12 px-4 py-2 bg-blue-600 text-white rounded">Read More</button>
-        <p class="mt-2">Posted on: 2023-10-01</p>
-
-      </div>
-    </div>
-      <div class="w-auto mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg flex justify-between space-x-4">
-      <div>
-        <img
-        class="h-48 w-48 border-4 border-blue-500"
-        src="pic2"
-        alt="Food Image"
-        />
-      </div>
-      <div class="justify-items-start pr-96">
-        <h1 class="text-xl font-bold">Delicious Recipe</h1>
-        <p>A delightful recipe that is sure to please your taste buds.</p>
-      </div>
-      <div>
-
-        <button id="btn" class="h-12 px-4 py-2 bg-blue-600 text-white rounded" >Read More</button>
-        <p class="mt-2">Posted on: 2023-10-01</p>
-      </div>
-    </div>
+    
+      
       <footer>
         <p class="text-gray-500 text-sm mt-10">© 2025 Food's Recipe Blog. All rights reserved.</p>
       </footer>
 
       <!--Modal of the cards-->
-  <div id="chaiModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 items-center justify-center hidden">
-    <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-      <h2 class="text-xl font-bold mb-4">Recipe Details</h2>
-      <img src="./src/public/Chai.jpg" class="mx-auto mt-6 h-48 w-48 " alt="Delicious Food" />
-      <p class="mt-2 text-gray-600">How to make the perfect cup of chai:</p>
-      <ol class="list-decimal list-inside mt-2 ">
-        <li>Take water in a patila.</li>
-        <li>Add tea leaves and let it Boil.</li>
-        <li>Beat the Ginger and add it.</li>
-        <li>Add milk and sugar to taste.</li>
-        <li>Strain into a cup and enjoy!</li>
-        <li>Wash the dishes don't be the dummy</li>
-      </ol>
-      <div class="mt-4">
-        <span class="text-gray-500">Posted on: 2023-10-01</span>
-      </div>
-      <button class=" close-btn mt-4 px-4 py-2 bg-blue-600 text-white rounded" id="closeModal">Close</button>
-    </div>
-  </div>
+  
   <div id="pohaModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 items-center justify-center hidden">
     <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
       <h1 class="text-xl font-bold">Indori Poha</h1>
@@ -149,6 +92,8 @@
       <button class="close-btn mt-4 px-4 py-2 bg-blue-600 text-white rounded" >Close</button>
     </div>
   </div>
+ 
+
   <script type="module" src="/src/main.ts"></script>
 </body>
 
