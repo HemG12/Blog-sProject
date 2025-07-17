@@ -27,7 +27,7 @@ function addStep(event: Event){
   const stepList = document.getElementById('step-list');
   if (!stepList) return;
   const newStep = document.createElement('li');
-  newStep.innerHTML = `<input type="text" placeholder="Enter a step" class="w-full p-2 border rounded">`;
+  newStep.innerHTML = `<input type="text" placeholder="Enter a step" class="w-full p-2 border rounded list-item ">`;
   stepList.appendChild(newStep);
 }
 
@@ -37,15 +37,60 @@ if (addStepBtn) {
 }
 
 const removeStep = (event: Event) => {
+  event.preventDefault();
   const stepList = document.getElementById('step-list');
   if (!stepList) return;
-  const stepItem = (event.target as HTMLElement).closest('li');
+  const stepItem = stepList.querySelector('li:last-child');
+
   if (stepItem) {
     stepList.removeChild(stepItem);
   }
 };
 
-const removeStepBtns = document.querySelectorAll('.remove-step');
-removeStepBtns.forEach(btn => {
-  btn.addEventListener('click', removeStep);
+const removeStepBtn = document.querySelector('.remove-step');
+
+if (removeStepBtn) {
+  removeStepBtn.addEventListener('click', removeStep);
+}
+
+const form = document.getElementById('postForm') as HTMLFormElement;
+form?.addEventListener('submit',async (event: Event) => {
+  event.preventDefault();
+
+  const authorName = (document.getElementById("authorName")as HTMLInputElement).value;
+  const title = (document.getElementById("title")as HTMLInputElement).value;
+  const description = (document.getElementById("description")as HTMLInputElement).value;
+  const imageFile = (document.getElementById("image")as HTMLInputElement ).files?.[0]
+  const steps = Array.from(document.querySelectorAll<HTMLInputElement>('#step-list li input')).map(input => input.value);
+  const imageBase64 = imageFile ? await toBase64(imageFile) : null;
+
+
+const post ={
+  authorName,
+  title,
+  description,
+  steps,
+  imageBase64,
+  createdAt: new Date().toISOString(),
+};
+
+const existingPost = JSON.parse(localStorage.getItem('posts') || '[]');
+existingPost.push(post);
+localStorage.setItem('posts', JSON.stringify(existingPost));
+
+alert('Post created successfully!');
+form.reset();
+document.getElementById("step-list")!.innerHTML = "";
+console.log(post)
 });
+
+
+function toBase64(file:File):Promise<string>{
+       return new Promise((resolve, reject) => {
+         const reader = new FileReader();
+         reader.onload = ()=> resolve(reader.result as string)
+         reader.onerror = reject;
+         reader.readAsDataURL(file);
+       })
+}
+
