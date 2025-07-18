@@ -3,6 +3,7 @@ import './style.css';
 document.querySelectorAll('.open-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
     const modalId = btn.getAttribute('data-modal');
+    console.log(modalId)
     if (!modalId) return;
     const modal = document.getElementById(modalId);
     if (modal) {
@@ -74,7 +75,7 @@ form?.addEventListener('submit', async (event: Event) => {
   alert('Post created successfully!');
   form.reset();
   document.getElementById("step-list")!.innerHTML = "";
-  displayPost();// re-render pos ts
+  displayPost();
 });
 
 function toBase64(file: File): Promise<string> {
@@ -96,23 +97,34 @@ function displayPost(search?: string) {
 
   display.innerHTML = ""; // clear previous
 
-  postData.forEach((post: any, index: number) => {
+postData.forEach((post: any, index: number) => {
     const postElement = document.createElement('div');
-    postElement.className = 'post-card w-full mx-auto gap-4 mt-10 bg-white p-6 rounded-lg shadow-lg';
+    postElement.className = 'post-card w-full mx-auto gap-4 mt-10 bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow border border-gray-100';
 
     postElement.innerHTML = `
       <div class="flex items-center justify-between">
-        <p class="mt-1 text-gray-600">Author: ${post.authorName}</p>
-        <p class="mt-1 text-gray-600">Posted on: ${new Date(post.createdAt).toLocaleDateString()}</p>
+        <p class="mt-1 text-[#5D4037] font-medium">Author: ${post.authorName}</p>
+        <p class="mt-1 text-[#5D4037]/80 text-sm">Posted on: ${new Date(post.createdAt).toLocaleDateString()}</p>
       </div>
-      ${post.imageBase64 ? `<img src="${post.imageBase64}" alt="Post Image" class="mx-auto mt-6 h-48 w-48">` : ''}
-      <h2 class="mt-2 text-xl font-bold">${post.title}</h2>
-      <p class="mt-1 text-gray-600">${post.description}</p>
-      <button class="read-more px-4 py-2 bg-blue-600 text-white rounded mt-4" data-index="${index}">Read More</button>
+      ${post.imageBase64 ? `
+        <img 
+          src="${post.imageBase64}" 
+          alt="Post Image" 
+          class="mx-auto mt-6 h-48 w-full object-cover rounded-lg border border-[#F9F7F0]"
+        >
+      ` : ''}
+      <h2 class="mt-2 text-xl font-bold text-[#5D4037]">${post.title}</h2>
+      <p class="mt-1 text-[#5D4037]/90">${post.description}</p>
+      <button 
+        class="read-more px-4 py-2 bg-[#FFA07A] hover:bg-[#5D4037] text-white rounded mt-4 transition-colors w-full" 
+        data-index="${index}"
+      >
+        Read More
+      </button>
     `;
 
     display.appendChild(postElement);
-  });
+});
 
   document.querySelectorAll('.read-more').forEach((btn) => {
     btn.addEventListener('click', (e) => {
@@ -166,18 +178,30 @@ function searchpost() {
   display.innerHTML = ""; // clear
   filteredPosts.forEach((post: any, index: number) => {
     const postElement = document.createElement('div');
-    postElement.className = 'post-card w-full mx-auto gap-4 mt-10 bg-white p-6 rounded-lg shadow-lg';
+ postElement.className = 'post-card w-full max-w-md mx-auto bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all border border-gray-100';
 
-    postElement.innerHTML = `
-      <div class="flex items-center justify-between">
-        <p class="mt-1 text-gray-600">Author: ${post.authorName}</p>
-        <p class="mt-1 text-gray-600">Posted on: ${new Date(post.createdAt).toLocaleDateString()}</p>
-      </div>
-      ${post.imageBase64 ? `<img src="${post.imageBase64}" alt="Post Image" class="mx-auto mt-6 h-48 w-48">` : ''}
-      <h2 class="mt-2 text-xl font-bold">${post.title}</h2>
-      <p class="mt-1 text-gray-600">${post.description}</p>
-      <button class="read-more px-4 py-2 bg-blue-600 text-white rounded mt-4" data-index="${index}">Read More</button>
-    `;
+postElement.innerHTML = `
+  <div class="flex items-center justify-between mb-3">
+    <p class="text-sm text-[#81C784] font-medium">Author: ${post.authorName}</p>
+    <p class="text-xs text-[#5D4037]/80">Posted on: ${new Date(post.createdAt).toLocaleDateString()}</p>
+  </div>
+  ${post.imageBase64 ? `
+    <img 
+      src="${post.imageBase64}" 
+      alt="Post Image" 
+      class="mx-auto mt-3 mb-4 h-48 w-full object-cover rounded-lg border border-[#F9F7F0]"
+    >
+  ` : ''}
+  <h2 class="text-xl font-bold text-[#5D4037] mb-2">${post.title}</h2>
+  <p class="text-[#5D4037]/90 mb-4">${post.description}</p>
+  <button 
+    class="read-more w-full px-4 py-2.5 bg-[#FFA07A] hover:bg-[#5D4037] text-white rounded-lg font-medium transition-colors" 
+    data-index="${index}"
+  >
+    Read More
+  </button>
+`;
+
 
     display.appendChild(postElement);
   });
@@ -190,6 +214,32 @@ function searchpost() {
   });
 }
 
+function changeView() {
+    const list = document.getElementById("postCard");
+    if (list) {
+        if (list.classList.contains('list')) {
+            
+            list.classList.remove('list');
+            list.classList.remove('flex');
+            list.classList.add('grid');
+        } else {
+            
+            list.classList.add('list');
+            list.classList.remove('grid');
+            list.classList.add('flex');
+        }
+    }
+}
+
+
 document.getElementById('searchInput')?.addEventListener('input', searchpost);
+
+document.getElementById("viewButton")?.addEventListener('click',changeView)
+
+document.getElementById("create-post")?.addEventListener('click',()=>{
+  const modal = document.getElementById("create-modal")
+  modal?.classList.remove("hidden");
+})
+
 
 displayPost();
