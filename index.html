@@ -28,11 +28,12 @@
   
 
   <!-- Dynamic Modal -->
-<div id="postModel" class="fixed inset-0 bg-gray-800/70 items-center justify-center hidden z-50">
+<div id="postModel" class="fixed inset-0 bg-gray-800/70 items-center justify-center hidden z-50 overflow-auto ">
     <div class="bg-white p-6 rounded-xl shadow-2xl max-w-md w-full border-2 border-[#FFA07A]/20">
-      <h2 id="title" class="text-2xl font-bold text-[#5D4037] mb-4"></h2>
+      <h2 id="h2-title" class="text-2xl font-bold text-[#5D4037] mb-4"></h2>
       <img id="img" src="" class="mx-auto mt-4 h-56 w-full object-cover rounded-lg border border-[#F9F7F0]" alt="Delicious Food" />
       <p id="desc" class="mt-4 text-[#5D4037]/90"></p>
+      <p id ="ingredient" class="mt-4 text-[#5D4037]/90"></p>
       <ol id="ol" class="list-decimal list-inside mt-4 space-y-2 text-[#5D4037]"></ol>
       <div class="mt-6">
         <span id="span" class="text-sm text-[#81C784] font-medium"></span>
@@ -44,8 +45,10 @@
 </div>
 
 <div id="postCard" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-4 "></div>
+<div id="listView" class="hidden "></div>
 <!--create post modal-->
-<div id="create-modal" class="fixed inset-0 bg-gray-800/70 items-center justify-center hidden z-50">
+<div id="create-modal" class="fixed inset-0 bg-gray-800/70 items-center justify-center hidden z-50 overflow-auto">
+  <button id="close-form" class=" top-4 right-4 text-black text-xl">X</button>
   <div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg text-3xl">
     <h1 class="text-3xl font-bold">Author Profile</h1>
     <Label class="mt-2 text-xl font-medium text-gray-700">Author Name</Label>
@@ -54,14 +57,17 @@
   </div>
     <div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg  ">
         <h1 class="text-2xl font-bold mb-4">Create a New Post</h1>
-        
+        <!-- Form for creating a new post -->
         <form id="postForm">
             <div class="mb-4">
                 <label for="title" class="block text-xl font-medium text-gray-700">Title</label>
                 <input type="text" id="title" name="title" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm ">
               <label for="description" class="block text-xl font-medium text-gray-700">Description</label>
               <textarea id="description" name="description" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm "></textarea>
-              <input type="file" id="image" name="image" accept="image/*" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm " required>
+              <label for="ingredients" class="block text-xl font-medium text-gray-700 mt-2">Ingredients</label>
+               <textarea name="ingredients" placeholder="Ingredients (separated by commas or line by line)" required class="w-full p-2 border rounded h-24"></textarea>
+              <label for="image" class="block text-xl font-medium text-gray-700 mt-2">Image</label>
+               <input type="file" id="image" name="image" accept="image/*" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm " required>
             </div>
             <div class="mb-4">
                 
@@ -78,8 +84,10 @@
 
 
   <!-- Footer -->
-  <footer>
-    <p class="text-[#666666] text-sm mt-10">© 2025 Food's Recipe Blog. All rights reserved.</p>
+  <footer class="flex justify-between items-center bg-white p-6 rounded-xl shadow-2xl  w-full border-2 border-[#FFA07A]/20 mt-10">
+    <div class="h-24">
+   <button id="pop">POP</button>
+    </div>
   </footer>
 
   <script type="module" src="/src/main.ts"></script>

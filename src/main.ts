@@ -53,29 +53,32 @@ form?.addEventListener('submit', async (event: Event) => {
   event.preventDefault();
 
   const authorName = (document.getElementById("authorName") as HTMLInputElement).value;
-  const title = (document.getElementById("title") as HTMLInputElement).value;
+  const title = (document.getElementById("title") as HTMLInputElement).value.toUpperCase();
   const description = (document.getElementById("description") as HTMLInputElement).value;
   const imageFile = (document.getElementById("image") as HTMLInputElement).files?.[0];
   const steps = Array.from(document.querySelectorAll<HTMLInputElement>('#step-list li input')).map(input => input.value);
   const imageBase64 = imageFile ? await toBase64(imageFile) : null;
+  const ingredients = (document.querySelector('textarea[name="ingredients"]') as HTMLTextAreaElement).value.split(/[\n,]+/).map(ingredient => ingredient.trim()).filter(Boolean);
 
   const post = {
     authorName,
     title,
     description,
+    ingredients,
     steps,
     imageBase64,
     createdAt: new Date().toISOString(),
   };
 
   const existingPost = JSON.parse(localStorage.getItem('posts') || '[]');
-  existingPost.unshift(post); // add to top
+  existingPost.unshift(post); 
   localStorage.setItem('posts', JSON.stringify(existingPost));
 
   alert('Post created successfully!');
   form.reset();
   document.getElementById("step-list")!.innerHTML = "";
   displayPost();
+  displayList();
 });
 
 function toBase64(file: File): Promise<string> {
@@ -86,6 +89,7 @@ function toBase64(file: File): Promise<string> {
     reader.readAsDataURL(file);
   });
 }
+
 
 function displayPost(search?: string) {
   const storedPosts = localStorage.getItem('posts');
@@ -107,20 +111,26 @@ postData.forEach((post: any, index: number) => {
         <p class="mt-1 text-[#5D4037]/80 text-sm">Posted on: ${new Date(post.createdAt).toLocaleDateString()}</p>
       </div>
       ${post.imageBase64 ? `
+        <div class= "">
         <img 
           src="${post.imageBase64}" 
           alt="Post Image" 
           class="mx-auto mt-6 h-48 w-full object-cover rounded-lg border border-[#F9F7F0]"
         >
       ` : ''}
-      <h2 class="mt-2 text-xl font-bold text-[#5D4037]">${post.title}</h2>
+      </div>
+      <div class="h-28">
+      <h2 class="mt-2 text-3xl font-bold text-[#5D4037]">${post.title}</h2>
       <p class="mt-1 text-[#5D4037]/90">${post.description}</p>
+      </div>
+      <div >
       <button 
-        class="read-more px-4 py-2 bg-[#FFA07A] hover:bg-[#5D4037] text-white rounded mt-4 transition-colors w-full" 
-        data-index="${index}"
+      class="read-more px-4 py-2 bg-[#FFA07A] hover:bg-[#5D4037] text-white rounded mt-4 transition-colors w-full " 
+      data-index="${index}"
       >
-        Read More
+      Read More
       </button>
+      </div>
     `;
 
     display.appendChild(postElement);
@@ -133,6 +143,58 @@ postData.forEach((post: any, index: number) => {
     });
   });
 }
+function displayList(search?: string) {
+  const storedPosts = localStorage.getItem('posts');
+  if (!storedPosts) return;
+
+  const postData = JSON.parse(storedPosts);
+  const display = document.getElementById("listView");
+  if (!display) return;
+
+  display.innerHTML = ""; // clear previous
+
+postData.forEach((post: any, index: number) => {
+    const postElement = document.createElement('div');
+   postElement.className =  'post-card w-auto mx-auto mt-10 bg-[#F5F5F5] p-6 rounded-lg shadow-lg flex justify-between items-center space-x-4';
+
+postElement.innerHTML = `
+  <div >
+    ${post.imageBase64 ? `
+      <img 
+        src="${post.imageBase64}" 
+        alt="Post Image" 
+        class="h-48 w-80 object-cover rounded border border-[#F9F7F0]"
+      >
+    ` : ''}
+  </div>
+  <div class="flex-1 text-left pr-10">
+    <h2 class="text-3xl font-bold text-[#5D4037]">${post.title}</h2>
+    <p class="text-[#5D4037]/90 mt-2">${post.description}</p>
+  </div>
+  <div class="text-right">
+    <button 
+      class="read-more h-12 px-4 py-2 bg-[#FFA07A] hover:bg-[#5D4037] text-white rounded mt-4 transition-colors w-full" 
+      data-index="${index}"
+    >
+      Read More
+    </button>
+    <p class="mt-2 text-sm text-[#666666]">Posted on: ${new Date(post.createdAt).toLocaleDateString()}</p>
+    <p class="text-sm text-[#5D4037] font-medium">Author: ${post.authorName}</p>
+  </div>
+`;
+
+
+    display.appendChild(postElement);
+});
+
+  document.querySelectorAll('.read-more').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const index = (e.currentTarget as HTMLButtonElement).getAttribute('data-index');
+      if (index) openModal(parseInt(index));
+    });
+  });
+}
+
 
 function openModal(index: number) {
   const storedPosts = localStorage.getItem('posts');
@@ -145,11 +207,11 @@ function openModal(index: number) {
   const modal = document.getElementById('postModel');
   if (!modal) return;
 
-  (document.getElementById('title') as HTMLElement).textContent = post.title;
+  (document.getElementById('h2-title') as HTMLElement).textContent = post.title;
   (document.getElementById('img') as HTMLImageElement).src = post.imageBase64 || '';
   (document.getElementById('desc') as HTMLElement).textContent = post.description;
   (document.getElementById('span') as HTMLElement).textContent = `Posted on: ${new Date(post.createdAt).toLocaleDateString()} by ${post.authorName}`;
-  
+  (document.getElementById('ingredient') as HTMLElement).textContent = post.ingredients;
   const stepsList = document.getElementById('ol') as HTMLOListElement;
   stepsList.innerHTML = "";
   post.steps.forEach((step: string) => {
@@ -173,12 +235,14 @@ function searchpost() {
   );
 
   const display = document.getElementById("postCard");
-  if (!display) return;
-
+  const displayList = document.getElementById("listView");
+  if(!display || !displayList) return;
+  
+  displayList.innerHTML = ""; // clear list view
   display.innerHTML = ""; // clear
   filteredPosts.forEach((post: any, index: number) => {
     const postElement = document.createElement('div');
- postElement.className = 'post-card w-full max-w-md mx-auto bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all border border-gray-100';
+ postElement.className = 'post-card  w-full max-w-md mx-auto bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all border border-gray-100';
 
 postElement.innerHTML = `
   <div class="flex items-center justify-between mb-3">
@@ -194,6 +258,7 @@ postElement.innerHTML = `
   ` : ''}
   <h2 class="text-xl font-bold text-[#5D4037] mb-2">${post.title}</h2>
   <p class="text-[#5D4037]/90 mb-4">${post.description}</p>
+  
   <button 
     class="read-more w-full px-4 py-2.5 bg-[#FFA07A] hover:bg-[#5D4037] text-white rounded-lg font-medium transition-colors" 
     data-index="${index}"
@@ -201,9 +266,36 @@ postElement.innerHTML = `
     Read More
   </button>
 `;
+const postList = document.createElement('div');
+   postList.className =  'post-card w-auto mx-auto mt-10 bg-[#F5F5F5] p-6 rounded-lg shadow-lg flex justify-between items-center space-x-4';
 
-
+postList.innerHTML = `
+  <div>
+    ${post.imageBase64 ? `
+      <img 
+        src="${post.imageBase64}" 
+        alt="Post Image" 
+        class="h-48 w-80 object-cover rounded border border-[#F9F7F0]"
+      >
+    ` : ''}
+  </div>
+  <div class="flex-1 text-left pr-10">
+    <h2 class="text-3xl font-bold text-[#5D4037]">${post.title}</h2>
+    <p class="text-[#5D4037]/90 mt-2">${post.description}</p>
+  </div>
+  <div class="text-right">
+    <button 
+      class="read-more h-12 px-4 py-2 bg-[#FFA07A] hover:bg-[#5D4037] text-white rounded mt-4 transition-colors w-full" 
+      data-index="${index}"
+    >
+      Read More
+    </button>
+    <p class="mt-2 text-sm text-[#666666]">Posted on: ${new Date(post.createdAt).toLocaleDateString()}</p>
+    <p class="text-sm text-[#5D4037] font-medium">Author: ${post.authorName}</p>
+  </div>
+`;
     display.appendChild(postElement);
+    displayList.appendChild(postList);
   });
 
   document.querySelectorAll('.read-more').forEach((btn) => {
@@ -214,32 +306,55 @@ postElement.innerHTML = `
   });
 }
 
-function changeView() {
-    const list = document.getElementById("postCard");
-    if (list) {
-        if (list.classList.contains('list')) {
-            
-            list.classList.remove('list');
-            list.classList.remove('flex');
-            list.classList.add('grid');
-        } else {
-            
-            list.classList.add('list');
-            list.classList.remove('grid');
-            list.classList.add('flex');
-        }
-    }
-}
+
 
 
 document.getElementById('searchInput')?.addEventListener('input', searchpost);
 
-document.getElementById("viewButton")?.addEventListener('click',changeView)
+//document.getElementById("viewButton")?.addEventListener('click',changeView)
 
 document.getElementById("create-post")?.addEventListener('click',()=>{
   const modal = document.getElementById("create-modal")
   modal?.classList.remove("hidden");
 })
+const modal = document.getElementById("create-modal")
+modal?.addEventListener('submit',()=>{
+  modal?.classList.add("hidden");
+})
 
+document.getElementById("close-form")?.addEventListener('click',()=>{
+  const modal = document.getElementById("create-modal")
+  modal?.classList.add("hidden");
+})
+  var check = true;
 
-displayPost();
+ document.getElementById('viewButton')?.addEventListener('click', () => {
+  
+  if (check){
+    document.getElementById("postCard")?.classList.add("hidden");
+    document.getElementById("listView")?.classList.remove("hidden");
+  }
+  else{
+    document.getElementById("postCard")?.classList.remove("hidden");
+    document.getElementById("postCard")?.classList.add("grid");
+    document.getElementById("listView")?.classList.add("hidden");
+  }
+  check = !check;
+ })
+
+ function pop(){
+       const storedPost = localStorage.getItem('posts');
+  if (!storedPost) return;
+  const parsed = JSON.parse(storedPost)
+  parsed.shift();
+  localStorage.setItem("posts",JSON.stringify(parsed));
+ }
+ document.getElementById("pop")?.addEventListener('click',()=>{
+  pop();
+  displayPost();
+  displayList();
+ }); 
+
+ displayPost();
+ displayList();
+ 
