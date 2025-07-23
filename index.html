@@ -1,94 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="" id="body">
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" href="/favicon.svg" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Food's Recipe Blog</title>
 </head>
 
-<body class="bg-[#FFFFFF] text-[#333333] text-center">
+<body  class="bg-[#FFFFFF] text-[#333333] text-center dark:bg-black">
   <!-- Header -->
-  <div class="flex justify-between items-center p-4 bg-[#FFFFFF] shadow-md h-20">
+  <div class="flex justify-between items-center p-4 bg-[#FFFFFF] shadow-md h-20 dark:shadow-emerald-50 dark:bg-[#111111]">
     <div class="flex items-center">
-      <img src="./src/public/logo.png" class="h-22 w-60" alt="Food's Recipe Blog Logo" />
+      <img id="logoImage" src="./src/public/logo.png"  class="h-22 w-60 dark:h-44 dark:-ml-2 dark:w-64" alt="Food's Recipe Blog Logo" />
     </div>
     <input
       type="text"
       id="searchInput"
       placeholder="Search recipes..."
-      class="mt-2 px-4 py-2 border border-[#F5F5F5] rounded-lg w-1/3 bg-[#F5F5F5] text-[#333333]"
+      class="mt-2 px-4 py-2 border dark:border-[#111111] rounded-lg w-1/3 bg-[#F5F5F5] text-[#333333] dark:bg-black dark:text-[#FF8C5A] dark:placeholder:text-[#FF8C5A] border-gray-300"
     />
-    <a id="create-post" class="mt-2 px-4 py-2 bg-[#FFA07A] text-white rounded hover:bg-[#5D4037]" >
+    <a id="create-post" class="mt-2 px-4 py-2 bg-[#FFA07A] text-white rounded hover:bg-[#5D4037] dark:bg-black cursor-pointer  dark:hover:bg-[#FF8C5A] dark:text-[#FF8C5A] dark:hover:text-black"  >
       Create Post
     </a>
-    <button id="viewButton" class="mt-2 px-4 py-2 bg-[#FFA07A] text-white rounded hover:bg-[#5D4037]" >View</button>
+    <button id="viewButton" class="mt-2 px-4 py-2 bg-[#FFA07A] text-white rounded hover:bg-[#5D4037] dark:bg-black  dark:hover:bg-[#FF8C5A] dark:text-[#FF8C5A] dark:hover:text-black "  >Change View</button>
+    <button id="darkMode" class="mt-2 px-4 py-2 bg-[#FFA07A] text-white rounded hover:bg-[#5D4037] dark:bg-black dark:hover:bg-[#FF8C5A] dark:text-[#FF8C5A] dark:hover:text-black " ></button>
+
   </div>
   
 
   <!-- Dynamic Modal -->
 <div id="postModel" class="fixed inset-0 bg-gray-800/70 items-center justify-center hidden z-50 overflow-auto ">
-    <div class="bg-white p-6 rounded-xl shadow-2xl max-w-md w-full border-2 border-[#FFA07A]/20">
-      <h2 id="h2-title" class="text-2xl font-bold text-[#5D4037] mb-4"></h2>
-      <img id="img" src="" class="mx-auto mt-4 h-56 w-full object-cover rounded-lg border border-[#F9F7F0]" alt="Delicious Food" />
-      <p id="desc" class="mt-4 text-[#5D4037]/90"></p>
-      <p id ="ingredient" class="mt-4 text-[#5D4037]/90"></p>
-      <ol id="ol" class="list-decimal list-inside mt-4 space-y-2 text-[#5D4037]"></ol>
+    <div class="bg-white p-6 pt-36 rounded-xl shadow-2xl max-w-xl w-full border-2 border-[#FFA07A]/20 dark:bg-[#111111]">
+      <h2 id="h2-title" class="text-2xl font-bold text-[#5D4037] mb-4  dark:text-[#FF8C5A]"></h2>
+      <img id="img" src="" class="mx-auto mt-4 h-56 w-full object-cover rounded-lg border border-[#F9F7F0] dark:border-[#111111]" alt="Delicious Food" />
+      <p id="desc" class=" mt-4 text-[#5D4037]/90 contents  dark:text-[#FF8C5A]"></p>
+      <p id ="ingredient" class="mt-4 text-[#5D4037]/90  dark:text-[#FF8C5A]">Ingredients:- </p>
+      <ol id="ol" class="list-decimal list-inside mt-4 space-y-2 text-[#5D4037]  dark:text-[#FF8C5A]"> Steps:-  </ol>
       <div class="mt-6">
-        <span id="span" class="text-sm text-[#81C784] font-medium"></span>
+        <span id="span" class="text-sm text-[#81C784] font-medium  dark:text-[#FF8C5A]"></span>
       </div>
-      <button class="close-btn mt-6 px-6 py-2.5 bg-[#FFA07A] hover:bg-[#5D4037] text-white rounded-lg w-full font-medium transition-colors">
+      <button class=" close-btn mt-6 px-6 py-2.5 bg-[#FFA07A] hover:bg-[#5D4037] text-white rounded-lg w-full font-medium transition-colors dark:bg-black dark:text-[#FF8C5A] dark:hover:text-[black] dark:hover:bg-[#FF8C5A]">
         Close
       </button>
     </div>
 </div>
 
-<div id="postCard" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-4 "></div>
+<div id="postCard" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-4  "></div>
 <div id="listView" class="hidden "></div>
 <!--create post modal-->
 <div id="create-modal" class="fixed inset-0 bg-gray-800/70 items-center justify-center hidden z-50 overflow-auto">
-  <button id="close-form" class=" top-4 right-4 text-black text-xl">X</button>
-  <div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg text-3xl">
-    <h1 class="text-3xl font-bold">Author Profile</h1>
-    <Label class="mt-2 text-xl font-medium text-gray-700">Author Name</Label>
-    <input type="text" id="authorName" required class="mt-2 block w-full border border-black rounded-md shadow-sm ">
+  
+  <div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg text-3xl dark:bg-[#111111]">
+    <button id="close-form" class=" top-4 right-0 text-black text-xl dark:text-[#FF8C5A]">X</button>
+    <h1 class="text-3xl font-bold dark:text-[#FF8C5A]">Author Profile</h1>
+    <Label class="mt-2 text-xl font-medium text-gray-700 dark:text-[#FF8C5A]">Author Name</Label>
+    <input type="text" id="authorName" required class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm dark:bg-black dark:text-[#FF8C5A] dark:border-[#111111] ">
     
   </div>
-    <div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg  ">
-        <h1 class="text-2xl font-bold mb-4">Create a New Post</h1>
+    <div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg dark:bg-[#111111] ">
+        <h1 class="text-2xl font-bold mb-4 dark:text-[#FF8C5A]">Create a New Post</h1>
         <!-- Form for creating a new post -->
         <form id="postForm">
             <div class="mb-4">
-                <label for="title" class="block text-xl font-medium text-gray-700">Title</label>
-                <input type="text" id="title" name="title" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm ">
-              <label for="description" class="block text-xl font-medium text-gray-700">Description</label>
-              <textarea id="description" name="description" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm "></textarea>
-              <label for="ingredients" class="block text-xl font-medium text-gray-700 mt-2">Ingredients</label>
-               <textarea name="ingredients" placeholder="Ingredients (separated by commas or line by line)" required class="w-full p-2 border rounded h-24"></textarea>
-              <label for="image" class="block text-xl font-medium text-gray-700 mt-2">Image</label>
-               <input type="file" id="image" name="image" accept="image/*" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm " required>
+                <label for="title" class="block text-xl font-medium text-gray-700 dark:text-[#FF8C5A]">Title</label>
+                <input type="text" id="title" name="title" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm dark:bg-black dark:text-[#FF8C5A] dark:border-[#111111]">
+              <label for="description" class="block text-xl font-medium text-gray-700 dark:text-[#FF8C5A]">Description</label>
+              <textarea id="description" name="description" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm dark:bg-black dark:text-[#FF8C5A] dark:border-[#111111]"></textarea>
+              <label for="ingredients" class="block text-xl font-medium text-gray-700 mt-2 dark:text-[#FF8C5A]"></label>
+               <textarea name="ingredients" placeholder="Ingredients (separated by commas or line by line)" required class="w-full p-2 border rounded h-24 dark:bg-black dark:text-[#FF8C5A] dark:placeholder:text-[#FF8C5A] dark:border-[#111111]"> </textarea>
+              <label for="image" class="block text-xl font-medium text-gray-700 mt-2 dark:text-[#FF8C5A]">Image</label>
+               <input type="file" id="image" name="image" accept="image/*" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm dark:border-[#111111] dark:text-[#FF8C5A] dark:file:bg-black dark:file:text-[#FF8C5A] " required>
             </div>
             <div class="mb-4">
                 
-                <button  class="add-step px-4 py-2 bg-blue-600 text-white rounded">Add Step</button>
+                <button  class="add-step px-4 py-2 bg-[#FFA07A] hover:bg-[#5D4037] text-white rounded dark:text-[#FF8C5A] dark:bg-black dark:hover:bg-[#FF8C5A] dark:hover:text-black">Add Step</button>
                 
-                <button  class="remove-step px-4 py-2 bg-red-800 text-black rounded">Remove Step</button>
+                <button  class="remove-step px-4 py-2 bg-[#FFA07A] hover:bg-[#5D4037] text-white rounded dark:text-[#FF8C5A] dark:bg-black dark:hover:bg-[#FF8C5A] dark:hover:text-black">Remove Step</button>
                   
                <div id="step-list"></div>
             </div>
-            <button  type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Submit Post</button>
+            <button  type="submit" class="px-4 py-2 bg-[#FFA07A] hover:bg-[#5D4037] text-white rounded dark:text-[#FF8C5A] dark:bg-black dark:hover:bg-[#FF8C5A] dark:hover:text-black">Submit Post</button>
         </form> 
     </div>
 </div>
 
 
   <!-- Footer -->
-  <footer class="flex justify-between items-center bg-white p-6 rounded-xl shadow-2xl  w-full border-2 border-[#FFA07A]/20 mt-10">
+  <footer class="flex justify-between items-center bg-white p-6 rounded-xl shadow-2xl  w-full border-2 border-[#FFA07A]/20 mt-10 dark:bg-[#111111]">
     <div class="h-24">
-   <button id="pop">POP</button>
+      <p class="text-[#5D4037] font-medium dark:text-[#FF8C5A]">© 2025 RecipeHub</p>
+      <p class="text-sm text-[#666666] dark:text-[#FF8C5A]">All rights reserved.</p>
+
     </div>
-  </footer>
+    <div class="flex space-x-4">
+      <a id="privacyPolicy" class="text-[#FFA07A] hover:text-[#5D4037] cursor-pointer dark:hover:text-white dark:text-[#FF8C5A]">Privacy Policy</a>
+      <a id="termsOfService" class="text-[#FFA07A] hover:text-[#5D4037] cursor-pointer dark:hover:text-white dark:text-[#FF8C5A]">Terms of Service</a>
+      <a id="contactUs" class="text-[#FFA07A] hover:text-[#5D4037] cursor-pointer dark:hover:text-white dark:text-[#FF8C5A]">Contact Us</a>
+      <a id="pop" class="cursor-pointer">,</a> 
+    </footer>
+  
+  <div id="privacy-policy" class="hidden fixed inset-0 bg-gray-800/70 items-center justify-center z-50 ">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full dark:bg-[#111111]">
+      <h2 class="text-xl font-bold mb-4 dark:text-[#FF8C5A]">Privacy Policy</h2>
+      <p class="text-gray-700 mb-4 dark:text-[#FF8C5A]">Your privacy is important to us. This policy explains how we collect, use, and protect your information.</p>
+      <button id="closePrivacyPolicy" class="close-btn w-full px-4 py-2 bg-[#FFA07A] text-white rounded dark:bg-black dark:hover:bg-[#FF8C5A] dark:text-[#FF8C5A] dark:hover:text-black ">Close</button>
+    </div>
+  </div>
+  <div id="terms-of-service" class="hidden fixed inset-0 bg-gray-800/70 items-center justify-center z-50">
+   <div  class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full dark:bg-[#111111]">
+      <h2 class="text-xl font-bold mb-4 dark:text-[#FF8C5A]">Terms of Service</h2>
+      <p class="text-gray-700 mb-4 dark:text-[#FF8C5A]">These terms govern your use of our website and services.</p>
+      <button id="closeTermsOfService" class="close-btn w-full px-4 py-2 bg-[#FFA07A] text-white rounded dark:bg-black dark:hover:bg-[#FF8C5A] dark:text-[#FF8C5A] dark:hover:text-black">Close</button>
+    </div>
+    
+  </div>
+  <div id="contact-us" class="hidden fixed inset-0 bg-gray-800/70 items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full dark:bg-[#111111]">
+      <h2 class="text-xl font-bold mb-4 dark:text-[#FF8C5A]">Contact Us</h2>
+      <p class="text-gray-700 mb-4 dark:text-[#FF8C5A]">If you have any questions, feel free to reach out.</p>
+      <a href="mailto:hemrajjangid27747@gmail.com" class="text-[#FFA07A] hover:text-[#5D4037]  dark:hover:text-[#FF8C5A] dark:text-[#FF8C5A]">hemrajjangid27747@gmail.com</a>
+      <div><button id="closeContactUs" class="close-btn w-full mt-4 px-4 py-2 bg-[#FFA07A] text-white rounded hover:bg-[#5D4037] dark:bg-black dark:hover:bg-[#FF8C5A]">Close</button></div>
+    </div>
+  </div>
 
   <script type="module" src="/src/main.ts"></script>
 </body>
